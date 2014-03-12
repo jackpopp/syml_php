@@ -2,10 +2,10 @@
 
 	include('autoload.php');
 
-	$routes = include(__DIR__.'/../app/config/routes.php');
-
 	$request = new Syml\Request();
-	$router = new Syml\Router($routes);
+	$router = new Syml\Router();
+
+	include(__DIR__.'/../app/config/routes.php');
 
 	$syml = new Syml\Syml($request, $router);
-	echo $syml->run();
+	print_r($syml->run());

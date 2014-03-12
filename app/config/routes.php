@@ -1,5 +1,5 @@
 <?php
+// registers routes via $router
 
-return array(
-	'pie' => 'pie#helloWorld'
-);
+$router->get('pie', 'pie#index');
+$router->post('pie', 'pie#create');
