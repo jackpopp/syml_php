@@ -3,9 +3,6 @@
 class Router
 {
 
-	private $requestURI;
-	private $requestType;
-
 	private $gets = [];
 	private $posts = [];
 	private $deletes = [];
@@ -14,30 +11,8 @@ class Router
 
 	public function __construct()
 	{
-		//$this->routes = $routes;
-		$this->setRequestType();
+
 	}	
-
-	public function getRequestURI()
-	{
-		return $this->requestURI;
-	}
-
-	public function setRequestURI($requestURI)
-	{
-		$this->requestURI = $requestURI;
-		return $this;
-	}
-
-	public function setRequestType()
-	{
-		$this->requestType = $_SERVER['REQUEST_METHOD'];
-	}
-
-	public function getRequestType()
-	{
-		return $this->requestType;
-	}
 
 	public function get($route, $destination)
 	{
@@ -49,16 +24,16 @@ class Router
 		$this->posts[$route] = array('route' => $route, 'destination' => $destination);
 	}
 
-	public function matchRoute()
+	public function matchRoute($requestURI, $requestMethod)
 	{	
-		switch ($this->getRequestType()) {
+		switch ($requestMethod) {
 			case 'GET':
-				if (array_key_exists($this->getRequestURI(), $this->gets))
-					return $this->gets[$this->getRequestURI()];
+				if (array_key_exists($requestURI, $this->gets))
+					return $this->gets[$requestURI];
 				break;
 			case 'POST':
-				if (array_key_exists($this->getRequestURI(), $this->posts))
-					return $this->posts[$this->getRequestURI()];
+				if (array_key_exists($requestURI, $this->posts))
+					return $this->posts[$requestURI];
 				break;
 		
 			default:

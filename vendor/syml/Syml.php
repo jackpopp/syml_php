@@ -10,12 +10,11 @@ class Syml
 	{
 		$this->request = $request;
 		$this->router = $router;
-		$this->router->setRequestURI($this->request->cleanRequestURI());
 	}
 
 	public function run()
 	{
-		return $this->router->matchRoute();
+		return $this->router->matchRoute($this->request->getRequestURI(), $this->request->getRequestMethod());
 	}
 
 }

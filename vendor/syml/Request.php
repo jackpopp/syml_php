@@ -4,6 +4,36 @@
 
 class Request 
 {
+
+	private $requestURI;
+	private $requestMethod;
+
+	public function __construct()
+	{
+		$this->setRequestMethod();
+		$this->setRequestURI($this->cleanRequestURI());
+	}
+
+	public function setRequestURI($requestURI)
+	{
+		$this->requestURI = $requestURI;
+		return $this;
+	}
+
+	public function getRequestURI()
+	{
+		return $this->requestURI;
+	}
+
+	public function setRequestMethod()
+	{
+		$this->requestMethod = $_SERVER['REQUEST_METHOD'];
+	}
+
+	public function getRequestMethod()
+	{
+		return $this->requestMethod;
+	}
 	
 	public function cleanRequestURI(){
 		// get the root and the request uri and split into array using forward slash delimiter
