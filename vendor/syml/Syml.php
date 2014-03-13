@@ -61,7 +61,7 @@ class Syml
 		else 
 		{
 			$dest = explode('#', $this->router->getRoute()['destination']);
-			$this->setControllerString(ucfirst($dest[0]),'Controller')->setFunction($dest[1]);
+			$this->setControllerString(ucfirst($dest[0]).'Controller')->setFunction($dest[1]);
 			$controllerString = $this->getControllerString();
 
 			# check for controller directory
