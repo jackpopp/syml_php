@@ -1,20 +1,18 @@
-<? 
+<?php
 
 class HomeController extends BaseController
 {
-	public function __construct()
-	{
-
-	}
 
 	public function index()
 	{
-		echo 'index';
+		$data = array('title' => 'This is a title');
+		$this->view->render('home/home', $data);
 	}
 
-	public function show($id)
+	public function show($title)
 	{
-		echo 'Show '.$id;
+		$data = array('title' => $title);
+		$this->view->render('home/home_title', $data);
 	}
 
 	public function create()

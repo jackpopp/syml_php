@@ -1,0 +1,1 @@
+The page title is <strong><?php echo $title; ?></strong>

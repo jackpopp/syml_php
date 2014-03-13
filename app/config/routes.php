@@ -4,12 +4,27 @@
 
 // route, controller#function or anonymous function
 
+/***
+*
+* --------------------
+* Routes config
+* --------------------
+*
+*
+*
+*
+*
+***/
+
+
 $router->get('home', 'home#index');
 
-#$router->get('home/{id}', 'home#show');
+$router->get('home/{title}', 'home#show');
 
+/*
 $router->get('home/{id}', function($id){
 	echo $id;
 });
+*/
 
 $router->post('home', 'home#create');
