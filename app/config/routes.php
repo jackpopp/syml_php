@@ -2,6 +2,14 @@
 // registers routes via $router
 // here are some examples below
 
-$router->get('pie', 'pie#index');
-$router->get('pie/{id}', 'pie#show');
-$router->post('pie', 'pie#create');
+// route, controller#function or anonymous function
+
+$router->get('home', 'home#index');
+
+#$router->get('home/{id}', 'home#show');
+
+$router->get('home/{id}', function($id){
+	echo $id;
+});
+
+$router->post('home', 'home#create');

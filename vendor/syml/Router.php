@@ -84,9 +84,6 @@ class Router
 		if (array_key_exists($requestURI, $routes))
 			return $routes[$requestURI];
 
-		# pie/{value}
-		# pie/5
-
 		$routeKey = null;
 
 		foreach ($routes as $key => $routeObject) {
@@ -103,7 +100,7 @@ class Router
 				break;
 			}
 		}
-		return ($routeKey) ? $routes[$routeKey] : null;
+		return ($routeKey) ? $routes[$routeKey] : $routeKey;
 	}
 
 	private function resolveArgsFromRoute($requestURI, $route)
