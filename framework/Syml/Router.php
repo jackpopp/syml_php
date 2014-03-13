@@ -3,18 +3,25 @@
 class Router
 {
 
-	private $gets = [];
-	private $posts = [];
-	private $deletes = [];
-	private $puts = [];
-	private $patches = [];
+	private static $methods = array('GET', 'POST', 'DELETE', 'PUT', 'PATCH');
 
-	private $args = [];
+	private $gets = array();
+	private $posts = array();
+	private $deletes = array();
+	private $puts = array();
+	private $patches = array();
+
+	private $args = array();
 	private $route = null;
 
 	public function __construct()
 	{
 
+	}
+
+	public function getMethods()
+	{
+		return self::$methods;
 	}
 
 	public function setRoute($route)
@@ -60,18 +67,10 @@ class Router
 	public function matchRoute($requestURI, $requestMethod)
 	{	
 		$foundRoute = null;
-		switch ($requestMethod) {
-			case 'GET':
-				$foundRoute = $this->resolveRouteFromRoutesArray($requestURI, $this->gets);
-				break;
-			case 'POST':
-				$foundRoute = $this->resolveRouteFromRoutesArray($requestURI, $this->posts);
-				break;
-		
-			default:
-				throw new \Exception("No route found");
-				break;
-		}
+		$methodArrayValue = strtolower($requestMethod).'s';
+
+		if (in_array($requestMethod, $this->getMethods()))
+			$foundRoute = $this->resolveRouteFromRoutesArray($requestURI, $this->$methodArrayValue);
 
 		if ($foundRoute == null)
 			throw new \Exception("No route found");
