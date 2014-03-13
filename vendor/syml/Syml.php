@@ -14,7 +14,10 @@ class Syml
 
 	public function run()
 	{
-		return $this->router->matchRoute($this->request->getRequestURI(), $this->request->getRequestMethod());
+		$this->router->matchRoute($this->request->getRequestURI(), $this->request->getRequestMethod());
+		echo '<pre>';
+		print_r($this->router->getRoute());
+		print_r($this->router->getArgs());
 	}
 
 }
