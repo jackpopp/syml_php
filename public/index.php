@@ -8,4 +8,4 @@
 	include(__DIR__.'/../app/config/routes.php');
 
 	$syml = new Syml\Syml($request, $router);
-	print_r($syml->run());
+	$syml->run();

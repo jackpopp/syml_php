@@ -14,6 +14,6 @@ class HomeController
 
 	public function show($id)
 	{
-		echo $id;
+		echo 'Show '.$id;
 	}
 }
