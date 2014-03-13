@@ -1,6 +1,6 @@
 <? 
 
-class HomeController 
+class HomeController extends BaseController
 {
 	public function __construct()
 	{
@@ -15,5 +15,10 @@ class HomeController
 	public function show($id)
 	{
 		echo 'Show '.$id;
+	}
+
+	public function create()
+	{
+		echo 'create';
 	}
 }

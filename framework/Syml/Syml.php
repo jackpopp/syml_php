@@ -71,9 +71,13 @@ class Syml
 
 			require_once(__DIR__.'/../../app/controllers/'.$controllerString.'.php');
 			if ( ! class_exists($controllerString))
-				throw new \Exception("Not Controller Found");
+				throw new \Exception("No Controller Found");
 				
 			$this->setController(new $controllerString());
+
+			if ( ! method_exists($this->getController(), $this->getFunction()))
+				throw new \Exception("Function not found in controller");
+				
 
 			return call_user_func_array(array($this->getController(), $this->getFunction()), $this->router->getArgs());
 		}
