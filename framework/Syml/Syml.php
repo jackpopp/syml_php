@@ -72,8 +72,19 @@ class Syml
 			require_once(__DIR__.'/../../app/controllers/'.$controllerString.'.php');
 			if ( ! class_exists($controllerString))
 				throw new \Exception("No Controller Found");
-				
-			$this->setController(new $controllerString());
+
+			# use reflection to get controllers paramaters
+			# iterate through and instantiate each object, then push into 
+			$controllerReflection = new \ReflectionClass($controllerString);
+			$paramStrings = $controllerReflection->getConstructor()->getParameters();
+			
+			$paramaters = array();
+			foreach ($paramStrings AS $paramString) {
+				$paramName = $paramString->getClass()->name;
+				$paramaters[] = new $paramName();
+			}
+
+			$this->setController($controllerReflection->newInstanceArgs($paramaters));
 
 			if ( ! method_exists($this->getController(), $this->getFunction()))
 				throw new \Exception("Function not found in controller");

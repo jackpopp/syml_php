@@ -1,7 +1,16 @@
 <?php
 
-class HomeController extends BaseController
+use Syml\View as View;
+
+class HomeController
 {
+
+	protected $view;
+
+	public function __construct(View $view)
+	{
+		$this->view = $view;
+	}
 
 	public function index()
 	{
