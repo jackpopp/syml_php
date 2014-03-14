@@ -21,7 +21,7 @@ class HomeController
 	public function show($title)
 	{
 		$data = array('title' => $title);
-		$this->view->render('home/home_title', $data);
+		$this->view->renderInLayout('home/home_title', $data);
 	}
 
 	public function create()
