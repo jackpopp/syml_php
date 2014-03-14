@@ -48,6 +48,11 @@ class Syml
 		return $this->function;
 	}
 
+	/**
+	* Runs the framework
+	*
+	*
+	*/
 	public function run()
 	{
 		$this->router->matchRoute($this->request->getRequestURI(), $this->request->getRequestMethod());
@@ -77,14 +82,14 @@ class Syml
 			# iterate through and instantiate each object, then push into 
 			$controllerReflection = new \ReflectionClass($controllerString);
 			$paramStrings = $controllerReflection->getConstructor()->getParameters();
-			
-			$paramaters = array();
+
+			$parameters = array();
 			foreach ($paramStrings AS $paramString) {
 				$paramName = $paramString->getClass()->name;
-				$paramaters[] = new $paramName();
+				$parameters[] = new $paramName();
 			}
 
-			$this->setController($controllerReflection->newInstanceArgs($paramaters));
+			$this->setController($controllerReflection->newInstanceArgs($parameters));
 
 			if ( ! method_exists($this->getController(), $this->getFunction()))
 				throw new \Exception("Function not found in controller");

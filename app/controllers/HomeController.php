@@ -15,7 +15,8 @@ class HomeController
 	public function index()
 	{
 		$data = array('title' => 'This is a title');
-		$this->view->render('home/home', $data);
+		//$this->view->render('home/home', $data);
+		$this->view->renderInLayout('home/home_title', $data);
 	}
 
 	public function show($title)

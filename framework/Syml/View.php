@@ -9,12 +9,24 @@ class View
 	* @param string   $viewTemplate    The template we wish to render
 	* @param array    $data            The data to pass to the view
 	*/
-	public function render($viewTemplate, $data)
+	public function render($viewTemplate, $data, $returnAsString = false)
 	{
 		foreach ($data as $key => $variable) {
 			$$key = $variable;
 		}
-		return include(__DIR__.'/../../app/views/'.$viewTemplate.'.php');
+		if ($returnAsString)
+		{
+			$render = null;
+			ob_start();
+				return include(__DIR__.'/../../app/views/'.$viewTemplate.'.php');
+				$render = ob_get_contents();
+			ob_end_clean();
+			return $render;
+		}
+		else
+		{
+			return include(__DIR__.'/../../app/views/'.$viewTemplate.'.php');
+		}
 	}
 
 	/**
@@ -36,7 +48,7 @@ class View
 
 		ob_start();
 			include(__DIR__.'/../../app/views/'.$viewTemplate.'.php');
-			$layoutBody = ob_get_contents();
+			$__body__ = ob_get_contents();
 		ob_end_clean();
 
 		include(__DIR__.'/../../app/views/layouts/'.$layoutTemplate.'.php');	

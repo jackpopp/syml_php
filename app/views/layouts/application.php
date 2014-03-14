@@ -2,7 +2,7 @@
 	Header
 </header>
 
-<?php echo $layoutBody; ?>
+<?php echo $__body__; ?>
 
 <footer>
 	Footer
