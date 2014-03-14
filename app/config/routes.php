@@ -16,7 +16,7 @@
 *
 ***/
 
-
+$router->get('/', 'home#index');
 $router->get('home', 'home#index');
 
 $router->get('home/{title}', 'home#show');

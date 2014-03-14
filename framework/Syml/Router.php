@@ -80,6 +80,10 @@ class Router
 
 	private function resolveRouteFromRoutesArray($requestURI, $routes)
 	{
+		# if request uri is empty look to see if a route for forward slash is registered
+		if (empty($requestURI) && (array_key_exists('/', $routes)))
+			return $routes['/'];
+
 		if (array_key_exists($requestURI, $routes))
 			return $routes[$requestURI];
 
