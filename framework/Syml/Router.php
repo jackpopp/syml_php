@@ -93,7 +93,7 @@ class Router
 
 			$route = $routeObject['route'];
 			$route = str_replace("/", "\\", $route);
-			$route = preg_replace('/{.*?}/', '/\w+', $route);
+			$route = preg_replace('/{.*?}/', '/[a-zA-Z%_\-0-9\(\)]+', $route);
 
 
 			if (preg_match('/('.$route.'$)/', $requestURI))
