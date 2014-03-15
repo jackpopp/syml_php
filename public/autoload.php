@@ -1,5 +1,7 @@
 <?php
 
+// load helpers
+include(__DIR__.'/../framework/syml/helpers.php');
 
 // register autloader
 function __autoload($className) {
