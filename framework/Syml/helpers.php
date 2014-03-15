@@ -17,3 +17,8 @@ function checkAuthenticityToken()
 {
 	( empty($_SESSION['csrfToken']) || empty($_POST['csrfToken']) || ($_SESSION['csrfToken'] != $_POST['csrfToken']) ) ? false : true;
 }
+
+function IOC()
+{
+	return new Syml\IOC();
+}
