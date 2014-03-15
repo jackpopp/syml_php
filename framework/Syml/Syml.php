@@ -78,18 +78,8 @@ class Syml
 			if ( ! class_exists($controllerString))
 				throw new \Exception("No Controller Found");
 
-			# use reflection to get controllers paramaters
-			# iterate through and instantiate each object, then push into 
-			$controllerReflection = new \ReflectionClass($controllerString);
-			$paramStrings = $controllerReflection->getConstructor()->getParameters();
-
-			$parameters = array();
-			foreach ($paramStrings AS $paramString) {
-				$paramName = $paramString->getClass()->name;
-				$parameters[] = new $paramName();
-			}
-
-			$this->setController($controllerReflection->newInstanceArgs($parameters));
+			$ioc = new IOC();
+			$this->setController($ioc->make($controllerString));
 
 			if ( ! method_exists($this->getController(), $this->getFunction()))
 				throw new \Exception("Function not found in controller");
