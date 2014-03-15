@@ -1,7 +1,28 @@
 <?php namespace Syml;
 
+use Syml\Input as Input;
+
 class View 
 {
+
+	protected $responseCode = 200;
+
+	public function __construct ()
+	{
+		http_response_code($this->getResponseCode());
+	}
+
+	public function setResponseCode($responseCode) 
+	{
+		$this->responseCode = $responseCode;
+		http_response_code($this->getResponseCode());
+		return $this;
+	}
+
+	public function getResponseCode()
+	{
+		return $this->responseCode;
+	}
 
 	/**
 	* Renders a template using the data provided and template specified

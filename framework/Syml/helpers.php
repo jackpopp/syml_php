@@ -15,5 +15,5 @@ function csrfToken()
 
 function checkAuthenticityToken()
 {
-	( empty($_SESSION['csrfToken']) || empty($_POST['csrfToken']) || ($_SESSION['csrfToken'] != $_POST['csrfToken']) ) ? false : true
+	( empty($_SESSION['csrfToken']) || empty($_POST['csrfToken']) || ($_SESSION['csrfToken'] != $_POST['csrfToken']) ) ? false : true;
 }
