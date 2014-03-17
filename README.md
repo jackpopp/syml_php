@@ -9,7 +9,9 @@ Routing
 
 Routing allows us to handle the different reqeusts that are made to the server, we register routes through the routes config files and these routes are mapped to a controller and function or an anonymous function. 
 
-Syml's router allows us to register routes for different http verbs (get/post/put/patch/delete) and also allows for dynamic URLs where variable values are mapped and passed to the mapped function
+Syml's router allows us to register routes for different http verbs (get/post/put/patch/delete) and also allows for dynamic URLs where variable values are mapped and passed to the mapped function.
+
+The routers config file can be found in app/config/routes.php.
 
 **Mapping routes**
 
@@ -122,7 +124,7 @@ Views
 -----
 
 Views are used to render templates and data from the controller they are one of the primary ways of responding to requests.
-The preferred method of accessing the View class is to inject the dependency via the controllers constrctor and allowing Syml's IOC container to resolve the class at runtime.
+we can access the View class by injecting the dependency via the controllers constrctor and allowing Syml's IOC container to resolve the class at runtime.
 In order to do this we **must** type hint the arguement in the constructor or the IOC container will not be able to resolve it. 
 
 **Injecting the view as a dependency in a controller**
@@ -131,13 +133,13 @@ In order to do this we **must** type hint the arguement in the constructor or th
 	{
 		protected $view;
 
-		public function __construct(View $view)
+		public function __construct(Syml\View $view)
 		{
 			$this->view = $view;
 		}
 	}
 
-An easier but less preferable way to use the View class is to call an instance of the IOC and execture the make method to resolve an instance of the View class.
+An easier but less preferable way to use the View class is to call an instance of the IOC and exectue the make method to resolve an instance of the View class.
 
 **Resolving the View class from IOC**
 
@@ -188,12 +190,125 @@ We can also set a http response code
 
 Session
 -----
+The session class is a simple wrapper around PHPs Session implementation, if can be accessed in the controller by injecting it as a type hinted dependency or by invoking the IOC container and makeing an instance.
+
+**Injecting the session dependency in a controller**
+	
+	class HomeController
+	{
+		protected $session;
+
+		public function __construct(Syml\Session $session)
+		{
+			$this->session = $session;
+		}
+	}
+
+**Setting a value in the session**
+	
+	$userId = 5;
+	$session->put('user_id', $userId);
+
+**Getting a value from the session**
+	
+	$session->give('user_id');
+
+**Get all values from the session**
+	
+	$session->all();
+
 
 Input
 -----
+The input class in a simple wrapper around the $_POST and $_GET global arrays, we can inject the input class into a controller as a type hinted depenceny or by invokte the IOC container and making an insance.
 
-IOC
+**Injecting the session dependency in a controller**
+	
+	class HomeController
+	{
+		protected $input;
+
+		public function __construct(Syml\Input $input)
+		{
+			$this->input = $input;
+		}
+	}
+
+**Getting a value from the input class**
+
+	$input->give('name');
+
+The input class will look in both the $_POST and $_GET arrays to find the specified key and return
+
+**Getting the entire POST array**
+
+	$input->post();
+
+**Getting the entire GET array**
+
+	$this->get();
+
+**Getting the POST and GET arrays**
+	
+	$input->all();
+
+
+IOC Container
 -----
+The inversion of control container allows us to easy manage the dependencies of a class.
+The container can automatically resolve type hinted dependencies on classes at runtime instead of hard coding dependancies, this allows greater flexbilty when developing our controllers and other classes. It also allows for easier testing as we can easliy mock dependencies and do not need to rely on running an full framework request to test controllers.
+
+**Type hinted dependencies on a controller**
+	
+	class HomeController
+	{
+		protected $session;
+		protected $input
+
+		public function __construct(Syml\Session $input, Syml\Input $input)
+		{
+			$this->session = $session;
+			$this->input = $input;
+		}
+	}
+
+In the above code the IOC container will use reflection to determine the dependencies passed to the constructor and automatically instantiate, if the injected class has injected dependencies then the container will also resolve them.
+
+In some cases we cant inject dependencies that we need for example in a view template we may wish to access the session class, in order access the class we can make use of the IOC helper function and the IOC make function.
+
+**IOC Make function**
+
+	IOC()->make('Syml\Session')->give('user_id'));
+
+Here the container will insanitate and return the class we have specified and we can imediately call methods on the class.
+
 
 Helpers
 -----
+
+There are several helper functions that can be used in the framework
+
+**Cross Site Request Forgery Helpers**
+
+A CSRF token can be generated by calling csrFToken()
+
+	csrfToken()
+	// UnIYSGAW9W8MCNZ385KpMQ==
+
+A CSRF token can be validated by calling checkAuthenticityToken(), the token must be passed as post variable with the csrfToken key
+
+	checkAuthenticityToken()
+	// returns true or false
+
+**IOC helper**
+
+We can generate an insance of the IOC container by calling IOC() and can then run it functions
+
+	IOC()->make('Syml\View')->render('home/home', array('title' => 'title'));
+
+**General helpers**
+
+The toCamelCase method takes a snake_case string value and returns a camelCase version
+
+	toCamelCase('snake_case');
+	// snakeCase
