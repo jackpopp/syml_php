@@ -30,7 +30,7 @@ class View
 	* @param string   $viewTemplate    The template we wish to render
 	* @param array    $data            The data to pass to the view
 	*/
-	public function render($viewTemplate, $data, $returnAsString = false)
+	public function render($viewTemplate, $data = array(), $returnAsString = false)
 	{
 		foreach ($data as $key => $variable) {
 			$$key = $variable;
@@ -59,7 +59,7 @@ class View
 	* @param array    $data            The data to pass to the view
 	* @param string   $layoutTemplate  The layout to render the template within
 	*/
-	public function renderInLayout($viewTemplate, $data, $layoutTemplate = 'application')
+	public function renderInLayout($viewTemplate, $data = array(), $layoutTemplate = 'application')
 	{
 		foreach ($data as $key => $variable) {
 			$$key = $variable;
