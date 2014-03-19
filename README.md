@@ -119,6 +119,21 @@ We can also update a record by calling the save function which will update the r
 	$user->name = "John";
 	$user->save();
 
+** Delete a record**
+
+We can delete a record from the database by calling delete on a instance of a model, doing so will delete it from database and unset the primiary key on the instance of the model.
+	
+	$userModel = new UserModel();
+	$user = $userModel->find(1);
+	$user->delete();
+
+** Find by * **
+
+We can find a model by any column using the findBy* function, to do this we call a functino with findByCamelCaseColumn and the value we are looking for.
+
+	$user = UserModel();
+	$user->findByEmailAddress('jack@jackpopp.com');
+
 
 Views
 -----
@@ -150,11 +165,12 @@ An easier but less preferable way to use the View class is to call an instance o
 We can render a view by using the render method, views are stored in the app/views folder and are a flat php file.
 The views file name must not include the .php extention as this is added by the render function, by default rendering a view will imedately output the render.
 
-**Passing data to a view**
-
 	$view->render('home/index');
 
-We can pass dat to a view using the second paramater of the render function and passing an array of data, the keys in the array can then be used to access the data passed into the view.
+**Passing data to a view**
+
+
+We can pass data to a view using the second paramater of the render function and passing an array of data, the keys in the array can then be used to access the data passed into the view.
 
 	$data = array('user_id' => 5);
 	$view->render('home/index', $data);
