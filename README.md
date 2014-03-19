@@ -17,36 +17,43 @@ The routers config file can be found in app/config/routes.php.
 
 Mapping a route to a controller and function
 
-    $router->get('route', 'controller#function');
+```php
+$router->get('route', 'controller#function');
+```
     
 Mapping a route to an anonymous function
 
-    $router->get('route', function(){ 
-        echo 'function';
-    });
-    
+```php
+$router->get('route', function(){ 
+    echo 'function';
+});
+```
+
 Mapping the base route of your application
-
+```php
     $router->get('/', 'home#index');
-
+```
 Mapping a dynamic route
-    
-    $router->get('users/{id}', 'users#show');
-    
-    // variables are accesable in the order defined in the route
-    // function ($id) { echo $id; }
-    
-    $router->get('users/{id}', function($id){ 
-        echo $id;
-    });
-    
+
+ ```php   
+$router->get('users/{id}', 'users#show');
+
+// variables are accesable in the order defined in the route
+// function ($id) { echo $id; }
+
+$router->get('users/{id}', function($id){ 
+    echo $id;
+});
+```    
 Mapping different http verbs
 
-    $router->get('users', 'users#index');
-    $router->post('users', 'users#create');
-    $router->delete('users/{id}', 'users#delete');
-    $router->put('users/{id}', 'users#update');
-    $router->patcha('users/{id}', 'users#update');
+```php
+$router->get('users', 'users#index');
+$router->post('users', 'users#create');
+$router->delete('users/{id}', 'users#delete');
+$router->put('users/{id}', 'users#update');
+$router->patcha('users/{id}', 'users#update');
+```
 
 Controllers
 -----
@@ -56,15 +63,17 @@ Controllers are stored in app/controllers and are prepending by the word control
 
 **Defining a controller**
 
-	Below is an example of defining a controller, the controller and index function can be mapped in the routes config with 'home#index' as the second paramater of a route.
+    Below is an example of defining a controller, the controller and index function can be mapped in the routes config with 'home#index' as the second paramater of a route.
 
-    class HomeController 
+```php
+class HomeController 
+{
+	function index()
 	{
-		function index()
-		{
-			echo 'This is the home page';
-		}
+		echo 'This is the home page';
 	}
+}
+```
 
 Models - ORM
 -----
@@ -76,64 +85,77 @@ Models are stored in the app/models folder must extend from the base model under
 
 Below is an example of defining a model the model extends the Syml\Model class and the table attribute must be the same as the table in the database.
 
-	class UserModel extends Syml\Model 
-	{
-		protected $table = 'Users';
-	}
+```php
+class UserModel extends Syml\Model 
+{
+	protected $table = 'Users';
+}
+```
 
 **Finding a record**
 
 Below is an example of finding a record in the database we pass the primary key which by default is the id and if a record is found it is returned as an instace of the model class.
-	
-	$userModel = new UserModel();
-	$user = $userModel->find(1);
+
+```php
+$userModel = new UserModel();
+$user = $userModel->find(1);
+```
 
 **Retriving all records**
 	
 To retrive all records we can call the all method and will be returned an array of model instances.
 
-	$userModel = new UserModel();
-	$users = $userModel->all();
+```php
+$userModel = new UserModel();
+$users = $userModel->all();
+```
 
 **Setting  and getting attributes on a modal**
 	
 To set an attribute on a modal we just set the property on the class, getting an attribute is as simple as calling that attribute.
 
-	$user = new UserModel();
-	$user->name = "Johnaldo";
-	$user->surname = "Jones";
-	echo $user->name;
+```php
+$user = new UserModel();
+$user->name = "Johnaldo";
+$user->surname = "Jones";
+echo $user->name;
+```
 
 **Insert or Update a record**
 
 To insert a record we simply call the save function on the model, this will insert the record in the database and populate the primary key.
 We can also update a record by calling the save function which will update the record that coresponds to the primiary key attribute on the modal.
 
-	// insert
-	$user = new UserModel();
-	$user->name = "Johnaldo";
-	$user->surname = "Jones";
-	$user->save();
+```php
+// insert
+$user = new UserModel();
+$user->name = "Johnaldo";
+$user->surname = "Jones";
+$user->save();
 
-	// update
-	$user->name = "John";
-	$user->save();
+// update
+$user->name = "John";
+$user->save();
+```
 
-** Delete a record**
+**Delete a record**
 
 We can delete a record from the database by calling delete on a instance of a model, doing so will delete it from database and unset the primiary key on the instance of the model.
-	
-	$userModel = new UserModel();
-	$user = $userModel->find(1);
-	$user->delete();
 
-** Find by * **
+```php
+$userModel = new UserModel();
+$user = $userModel->find(1);
+$user->delete();
+```
+
+**Find by columnname**
 
 We can find a model by any column using the findBy* function, to do this we call a functino with findByCamelCaseColumn and the value we are looking for.
 
-	$user = UserModel();
-	$user->findByEmailAddress('jack@jackpopp.com');
-
+```php
+$user = UserModel();
+$user->findByEmailAddress('jack@jackpopp.com');
+```
 
 Views
 -----
@@ -143,130 +165,163 @@ we can access the View class by injecting the dependency via the controllers con
 In order to do this we **must** type hint the arguement in the constructor or the IOC container will not be able to resolve it. 
 
 **Injecting the view as a dependency in a controller**
-	
-	class HomeController
-	{
-		protected $view;
 
-		public function __construct(Syml\View $view)
-		{
-			$this->view = $view;
-		}
+```php
+class HomeController
+{
+	protected $view;
+
+	public function __construct(Syml\View $view)
+	{
+		$this->view = $view;
 	}
+}
+```
 
 An easier but less preferable way to use the View class is to call an instance of the IOC and exectue the make method to resolve an instance of the View class.
 
 **Resolving the View class from IOC**
 
-	$view = IOC()->make('Syml\View');
+```php
+$view = IOC()->make('Syml\View');
+```
 
 **Rendering a view**
 
 We can render a view by using the render method, views are stored in the app/views folder and are a flat php file.
 The views file name must not include the .php extention as this is added by the render function, by default rendering a view will imedately output the render.
 
-	$view->render('home/index');
+```php
+$view->render('home/index');
+```
 
 **Passing data to a view**
 
 
 We can pass data to a view using the second paramater of the render function and passing an array of data, the keys in the array can then be used to access the data passed into the view.
 
-	$data = array('user_id' => 5);
-	$view->render('home/index', $data);
+```php
+$data = array('user_id' => 5);
+$view->render('home/index', $data);
 
-	// id can be accessed in the view as follows
-	echo $id;
+// id can be accessed in the view as follows
+echo $id;
+```
 
 **Rendering the view as a string**
 
 If we want to return the rendered view as a string to use later and not be imedately rendered we can pass a third paramater of true to render as string
-	
-	$data = array('user_id' => $data);
-	$renderedView = $view->render('home/index', $data, true);
 
-	echo $renderedView;
+```php
+$data = array('user_id' => $data);
+$renderedView = $view->render('home/index', $data, true);
+
+echo $renderedView;
+```
 
 **Rendering a view within a layout**
 
 We can also render a view within a layout, for example if you have a generic header and footer for each page we can render out different view templates within this consistent layout structure.
 By default the layout will be the application.php layout in the layouts folder.
 
-	$this->view->renderInLayout('home/index', $data);
+```php
+$this->view->renderInLayout('home/index', $data);
+```
 
 We can specify a layout adding a third paramater, within the layout we can access the rendered view for body content by calling $__body__
 
-	$this->view->renderInLayout('home/index', $data, 'homeLayout');
+```php
+$this->view->renderInLayout('home/index', $data, 'homeLayout');
+```
 
 **Setting the http response code**
 
 We can also set a http response code 
-	
-	$this->view->setResponse(201)->renderInLayout('home/created', $data);
+
+```php
+$this->view->setResponse(201)->renderInLayout('home/created', $data);
+```
 
 Session
 -----
 The session class is a simple wrapper around PHPs Session implementation, if can be accessed in the controller by injecting it as a type hinted dependency or by invoking the IOC container and makeing an instance.
 
 **Injecting the session dependency in a controller**
-	
-	class HomeController
-	{
-		protected $session;
 
-		public function __construct(Syml\Session $session)
-		{
-			$this->session = $session;
-		}
+```php
+class HomeController
+{
+	protected $session;
+
+	public function __construct(Syml\Session $session)
+	{
+		$this->session = $session;
 	}
+}
+```
 
 **Setting a value in the session**
-	
-	$userId = 5;
-	$session->put('user_id', $userId);
+
+```php
+$userId = 5;
+$session->put('user_id', $userId);
+```
 
 **Getting a value from the session**
 	
-	$session->give('user_id');
+```php
+$session->give('user_id');
+```
 
 **Get all values from the session**
 	
-	$session->all();
-
+```php
+$session->all();
+```
 
 Input
 -----
 The input class in a simple wrapper around the $_POST and $_GET global arrays, we can inject the input class into a controller as a type hinted depenceny or by invokte the IOC container and making an insance.
 
 **Injecting the session dependency in a controller**
-	
-	class HomeController
-	{
-		protected $input;
 
-		public function __construct(Syml\Input $input)
-		{
-			$this->input = $input;
-		}
+```php
+class HomeController
+{
+	protected $input;
+
+	public function __construct(Syml\Input $input)
+	{
+		$this->input = $input;
 	}
+}
+```
 
 **Getting a value from the input class**
 
-	$input->give('name');
+```php
+$input->give('name');
+```
 
 The input class will look in both the $_POST and $_GET arrays to find the specified key and return
 
 **Getting the entire POST array**
 
-	$input->post();
+```php
+$input->post();
+```
 
 **Getting the entire GET array**
 
-	$this->get();
+```php
+$this->get();
+```
 
 **Getting the POST and GET arrays**
 	
-	$input->all();
+```php
+$input->all();
+```
 
 
 IOC Container
@@ -276,17 +331,19 @@ The container can automatically resolve type hinted dependencies on classes at r
 
 **Type hinted dependencies on a controller**
 	
-	class HomeController
-	{
-		protected $session;
-		protected $input
+```php
+class HomeController
+{
+	protected $session;
+	protected $input
 
-		public function __construct(Syml\Session $input, Syml\Input $input)
-		{
-			$this->session = $session;
-			$this->input = $input;
-		}
+	public function __construct(Syml\Session $input, Syml\Input $input)
+	{
+		$this->session = $session;
+		$this->input = $input;
 	}
+}
+```
 
 In the above code the IOC container will use reflection to determine the dependencies passed to the constructor and automatically instantiate, if the injected class has injected dependencies then the container will also resolve them.
 
@@ -294,7 +351,9 @@ In some cases we cant inject dependencies that we need for example in a view tem
 
 **IOC Make function**
 
-	IOC()->make('Syml\Session')->give('user_id'));
+```php
+IOC()->make('Syml\Session')->give('user_id'));
+```
 
 Here the container will insanitate and return the class we have specified and we can imediately call methods on the class.
 
@@ -308,23 +367,31 @@ There are several helper functions that can be used in the framework
 
 A CSRF token can be generated by calling csrFToken()
 
-	csrfToken()
-	// UnIYSGAW9W8MCNZ385KpMQ==
+```php
+csrfToken()
+// UnIYSGAW9W8MCNZ385KpMQ==
+```
 
 A CSRF token can be validated by calling checkAuthenticityToken(), the token must be passed as post variable with the csrfToken key
 
-	checkAuthenticityToken()
-	// returns true or false
+```php
+checkAuthenticityToken()
+// returns true or false
+```
 
 **IOC helper**
 
 We can generate an insance of the IOC container by calling IOC() and can then run it functions
 
-	IOC()->make('Syml\View')->render('home/home', array('title' => 'title'));
+```php
+IOC()->make('Syml\View')->render('home/home', array('title' => 'title'));
+```
 
 **General helpers**
 
 The toCamelCase method takes a snake_case string value and returns a camelCase version
 
-	toCamelCase('snake_case');
-	// snakeCase
+```php
+toCamelCase('snake_case');
+// snakeCase
+```
