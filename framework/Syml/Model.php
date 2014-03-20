@@ -1,10 +1,12 @@
 <?php namespace Syml;
 
 use \PDO as PDO;
+use Syml\ModelCollection as ModelCollection;
 
 class Model
 {
 
+	protected $config;
 	protected $attributes = array();
 	protected $connection = null;
 	protected $primaryKey = 'id';
@@ -14,6 +16,7 @@ class Model
 	public function __construct($attributes = array())
 	{
 		$this->attributes = $attributes;
+		$this->config = require(__DIR__.'/../../app/config/database.php');
 	}
 
 	public function getAttributes()
@@ -67,7 +70,26 @@ class Model
 		$connection = $this->connect()->getConnection();
 		$query = $connection->prepare("SELECT * FROM ".$this->getTable()." WHERE ".$column." = ?");
     	$query->execute(array($value));
-    	return new self($query->fetch());
+    	$count = $query->rowCount();
+
+    	if ($count > 0)
+    	{
+    		if ($count == 1)
+    		{
+    			return new self($query->fetch());
+    		}
+    		else
+    		{
+    			$models = array();
+
+    			while ($result = $query->fetch())
+    				$models[] = new self($result);
+
+		    	$modelCollection = new ModelCollection();
+		    	$modelCollection->setModels($models);
+		    	return $modelCollection;
+    		}
+    	}		
 	}
 
 	public function all()
@@ -82,7 +104,10 @@ class Model
 
     	while ($result = $query->fetch())
     		$models[] = new self($result);
-    	return $models;
+
+    	$modelCollection = new ModelCollection();
+    	$modelCollection->setModels($models);
+    	return $modelCollection;
 	}
 
 	# save or update model
@@ -141,16 +166,32 @@ class Model
 		}
 	}
 
+	public function queryRaw($query, $values)
+	{
+
+	}
+
 	public function connect()
 	{
 		if ($this->getConnection() == null)
 		{
-			$connection = new PDO("mysql:host=localhost;dbname=syml;port=8889;", 'root', 'root');
+			$connection = new PDO("mysql:host=".$this->config['host'].";dbname=".$this->config['dbname'].";port=".$this->config['port'].";", $this->config['username'], $this->config['password']);
 			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 			$connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 			$this->setConnection($connection);
 		}	
 		return $this;
+	}
+
+	public function toArray()
+	{
+		$attributes = $this->getAttributes();
+		$modelArray = array();
+
+		foreach ($attributes as $key => $value)
+			$modelArray[$key] = $value;
+
+		return $modelArray;
 	}
 
 	public function __get($key)
