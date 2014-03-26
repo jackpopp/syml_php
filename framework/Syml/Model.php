@@ -168,6 +168,16 @@ class Model
 
 	public function queryRaw($query, $values)
 	{
+		$connection = $this->getConnection();
+		$query = $this->connection->prepare($query);
+		$query->execute($value);
+
+		$results = array();
+
+		while ($result = $query->fetch())
+    		$results[] = $result;
+
+    	return $results;
 
 	}
 
